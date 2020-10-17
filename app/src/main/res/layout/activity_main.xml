@@ -30,8 +30,8 @@
 
     <ImageView
         android:id="@+id/ivPostImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_below="@+id/btnCaptureImage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
@@ -46,6 +46,6 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="5dp"
-        android:text="Button" />
+        android:text="Submit" />
 
 </RelativeLayout>
