@@ -29,8 +29,8 @@ import java.util.List;
 public class PostsFragment extends Fragment {
     public static final String TAG = "PostsFragments";
     private RecyclerView rvPosts;
-    private PostsAdapter adapter;
-    private List<Post> allPosts;
+    protected PostsAdapter adapter;
+    protected List<Post> allPosts;
 
 
     public PostsFragment() {
@@ -64,10 +64,12 @@ public class PostsFragment extends Fragment {
 
     }
 
-    private void queryPosts() {
+    protected void queryPosts() {
         // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
+        query.setLimit(20);
+        query.addDescendingOrder(Post.KEY_CREATED_KEY);
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
