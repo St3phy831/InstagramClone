@@ -32,7 +32,7 @@ public class PostsFragment extends Fragment {
     private RecyclerView rvPosts;
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
-    private SwipeRefreshLayout swipeContainer;
+    protected SwipeRefreshLayout swipeContainer;
 
 
     public PostsFragment() {
@@ -97,7 +97,7 @@ public class PostsFragment extends Fragment {
                 for (Post post : posts){
                     Log.i(TAG, "Post: " + post.getDescription() + ", username " + post.getUser().getUsername());
                 }
-                //Call adapter methods for Swipe Refresh 
+                //Call adapter methods for Swipe Refresh
                 adapter.clear();
                 adapter.addAll(posts);
                 swipeContainer.setRefreshing(false);
