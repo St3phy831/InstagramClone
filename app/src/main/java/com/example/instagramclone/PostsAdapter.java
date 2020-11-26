@@ -2,22 +2,31 @@ package com.example.instagramclone;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.util.List;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+import static com.example.instagramclone.Post.KEY_USER;
+
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener{
     private Context context;
     private List<Post> posts;
+    LinearLayout contain;
+
 
     public PostsAdapter(Context context, List<Post> posts) {
         this.context = context;
@@ -28,6 +37,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
+        contain = view.findViewById(R.id.container);
         return new ViewHolder(view);
     }
 
@@ -70,7 +80,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         }
 
-        public void bind(Post post) {
+        public void bind(final Post post) {
             //Bind data tp view elements
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
@@ -78,6 +88,42 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (image != null){
                 Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
             }
+            contain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Gets the posts & current user
+                    String user = post.getUser().getUsername();
+                    String current = ParseUser.getCurrentUser().getUsername();
+                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                    //Shows pop up if user's post
+                    if(current.equals(user)){
+                        showPopUp(view);
+                    }
+
+                }
+            });
         }
     }
+
+    //creates pop up
+    protected void showPopUp(View view) {
+        PopupMenu popup = new PopupMenu(context, view);
+        popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this);
+        popup.inflate(R.menu.pop_up);
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            //TODO: Will add action to Delete post
+            case R.id.delete:
+                Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
 }

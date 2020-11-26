@@ -108,8 +108,8 @@ public class ComposeFragment extends Fragment {
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
                 if (currentUser == null){
                     Log.i(TAG, "You logged out!");
+                    goLoginActivity();
                 }
-                goLoginActivity();
             }
         });
     }
