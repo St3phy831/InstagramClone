@@ -1,6 +1,7 @@
 package com.example.instagramclone;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,12 +21,15 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-import static com.example.instagramclone.Post.KEY_USER;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener{
     private Context context;
     private List<Post> posts;
+    private Post post;
+
     LinearLayout contain;
+
+    public static final String TAG = "Adapter";
 
 
     public PostsAdapter(Context context, List<Post> posts) {
@@ -43,7 +47,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Post post = posts.get(position);
+        post = posts.get(position);
         holder.bind(post);
 
 
@@ -92,14 +96,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     //Gets the posts & current user
+
                     String user = post.getUser().getUsername();
                     String current = ParseUser.getCurrentUser().getUsername();
-                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
                     //Shows pop up if user's post
                     if(current.equals(user)){
                         showPopUp(view);
                     }
-
                 }
             });
         }
@@ -111,14 +114,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this);
         popup.inflate(R.menu.pop_up);
         popup.show();
+
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch(menuItem.getItemId()){
-            //TODO: Will add action to Delete post
             case R.id.delete:
-                Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
+                deletePost();
                 return true;
             default:
                 return false;
@@ -126,4 +129,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
 
+    private void deletePost() {
+        //Deletes the entire ParseObject from the database
+        post.deleteInBackground();
+        Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+    }
 }
